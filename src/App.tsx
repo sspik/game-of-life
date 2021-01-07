@@ -13,26 +13,29 @@ import { Game, ISettings } from "./game/game";
 import './App.css';
 
 interface IAppState extends ISettings {
-  [key: string]: number
+  [key: string]: number | number[]
 }
 
 const initState: IAppState = {
   tickTime: 20,
   objectSize: 10,
-  resolution: window.innerWidth > 500 ? 800 : 300,
+  resolutionWidth: window.innerWidth > 500 ? 1300 : 300,
+  resolutionHeight: window.innerWidth > 500 ? 780 : 300,
   density: 2,
 }
 
 const minValues: IAppState = {
   tickTime: 20,
   objectSize: 5,
-  resolution: 50,
+  resolutionWidth: 50,
+  resolutionHeight: 50,
   density: 2,
 }
 
 export const App: FC = () => {
   const [ state, setState ] = useState<ISettings>(initState);
   const handleChangeSettings = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target)
     if (minValues[e.target.name] > parseInt(e.target.value)) return;
     setState({
       ...state,

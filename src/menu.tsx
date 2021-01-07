@@ -14,7 +14,8 @@ export const Menu: FC<IMenuPros> = (props) => {
     tickTime,
     density,
     objectSize,
-    resolution,
+    resolutionWidth,
+    resolutionHeight,
     handleStartGame,
     handleStopGame,
     handleRestartGame,
@@ -74,9 +75,17 @@ export const Menu: FC<IMenuPros> = (props) => {
             </span>
             <input
               type="number"
-              name="resolution"
-              value={resolution}
+              name="resolutionWidth"
+              value={resolutionWidth}
               onChange={handleChange}
+              placeholder="width"
+            />
+            <input
+              type="number"
+              name="resolutionHeight"
+              value={resolutionHeight}
+              onChange={handleChange}
+              placeholder="height"
             />
           </label>
         </div>

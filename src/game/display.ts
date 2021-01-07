@@ -7,14 +7,15 @@ export class Display {
   private ctx: CanvasRenderingContext2D;
 
   constructor(
-    private resolution: number,
+    private resolutionWidth: number,
+    private resolutionHeight: number,
     private objectSize: number,
     private canvas: HTMLCanvasElement,
     private storage: Storage,
   ){
     this.ctx = this.canvas.getContext("2d")!;
-    this.canvas.width = resolution;
-    this.canvas.height = resolution;
+    this.canvas.width = resolutionWidth;
+    this.canvas.height = resolutionHeight;
     this.ctx.beginPath();
     this.ctx.lineWidth = 0.2;
   }
@@ -34,14 +35,14 @@ export class Display {
   private createPixel(obj: GameObject, coords: number[]): void {
     this.ctx.fillStyle = obj.isLife ? obj.color : 'white';
     this.ctx.fillRect(
-      coords[0] * this.objectSize,
       coords[1] * this.objectSize,
+      coords[0] * this.objectSize,
       this.objectSize,
       this.objectSize,
     )
     this.ctx.strokeRect(
-      coords[0] * this.objectSize,
       coords[1] * this.objectSize,
+      coords[0] * this.objectSize,
       this.objectSize,
       this.objectSize,
     )

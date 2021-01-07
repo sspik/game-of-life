@@ -7,7 +7,8 @@ import { GameObject } from "./gameObject";
 
 export interface ISettings {
   objectSize: number;
-  resolution: number;
+  resolutionWidth: number;
+  resolutionHeight: number;
   tickTime: number;
   density: number;
 }
@@ -28,7 +29,8 @@ export class Game {
       settings.tickTime
     );
     this.display = new Display(
-      this.settings.resolution,
+      this.settings.resolutionWidth,
+      this.settings.resolutionHeight,
       this.settings.objectSize,
       this.canvas,
       this.storage,
@@ -56,10 +58,11 @@ export class Game {
 
   private createObjects(): GameObject[][] {
     let objects: GameObject[][] = [];
-    const side = this.settings.resolution / this.settings.objectSize;
-    for (let x = 0; x < side; x += 1) {
+    const sideX = this.settings.resolutionHeight / this.settings.objectSize;
+    const sideY = this.settings.resolutionWidth / this.settings.objectSize;
+    for (let x = 0; x < sideX; x += 1) {
       let axis: GameObject[] = []
-      for (let y = 0; y < side; y += 1) {
+      for (let y = 0; y < sideY; y += 1) {
         axis.push(new GameObject(
           _.random(this.settings.density) === 0
         ))

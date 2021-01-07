@@ -2,21 +2,24 @@ import { GameObject } from "./gameObject"
 
 export class Storage {
 
-  private storageSize: number;
+  private storageSizeX: number;
+  private storageSizeY: number;
 
   constructor(public objects: GameObject[][]){
-    this.storageSize = objects.length;
+    this.storageSizeX = objects.length;
+    this.storageSizeY = objects[0].length;
   }
 
   public newObjects(objects: GameObject[][]){
-    this.storageSize = objects.length;
+    this.storageSizeX = objects.length;
+    this.storageSizeY = objects[0].length;
     this.objects = objects;
   }
 
   public getObject(coords: number[]): GameObject {
     const [ x, y ] = coords;
-    const xPosition = (x + this.storageSize) % this.storageSize;
-    const yPosition = (y + this.storageSize) % this.storageSize;
+    const xPosition = (x + this.storageSizeX) % this.storageSizeX;
+    const yPosition = (y + this.storageSizeY) % this.storageSizeY;
     return this.objects[xPosition][yPosition];
   }
 
