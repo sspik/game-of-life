@@ -1,22 +1,27 @@
 import { GameObject } from "./gameObject"
 
 export class Storage {
-  constructor(private objects: GameObject[]){}
 
-  public getObject(coords: GameObject["coordinates"]): GameObject {
-    return this.objects.filter(obj => obj.coordinates === coords)[0];
+  private storageSize: number;
+
+  constructor(public objects: GameObject[][]){
+    this.storageSize = objects.length;
   }
 
-  public setObject(gameObject:GameObject): void {
-    this.objects.push(gameObject);
+  public newObjects(objects: GameObject[][]){
+    this.storageSize = objects.length;
+    this.objects = objects;
   }
 
-  public deleteObject(coords: GameObject["coordinates"]): void {
-    this.objects = this.objects.filter(obj => obj.coordinates !== coords);
+  public getObject(coords: number[]): GameObject {
+    const [ x, y ] = coords;
+    const xPosition = (x + this.storageSize) % this.storageSize;
+    const yPosition = (y + this.storageSize) % this.storageSize;
+    return this.objects[xPosition][yPosition];
   }
 
-  public getAreaObjects(coords: GameObject["coordinates"]): GameObject[] {
-    const [x, y] = coords;
+  public getAreaObjects(coords: number[]): GameObject[] {
+    const [ x, y ] = coords;
     const coordsArea = [
       [x - 1, y - 1],
       [x - 1, y    ],
@@ -27,7 +32,6 @@ export class Storage {
       [x + 1, y - 1],
       [x    , y - 1],
     ];
-    return coordsArea.map(c => this.getObject(c))
+    return coordsArea.map(c => this.getObject(c)).filter(c => !!c);
   }
 }
-

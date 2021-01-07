@@ -1,14 +1,14 @@
 import { v4 as uuid4 } from "uuid";
 
 interface IGameObject {
-  coordinates: number[];
   id: string;
   color: string;
+  isLife: boolean;
 }
 
 abstract class GameObjectBase {
   private readonly _id: string;
-  constructor(public coordinates: number[]) {
+  constructor(public isLife: boolean) {
     this._id = uuid4();
   }
   public get id(): string {
@@ -17,5 +17,5 @@ abstract class GameObjectBase {
 }
 
 export class GameObject extends GameObjectBase implements IGameObject {
-  public color: string = '#00ff00';
+  public color: string = '#1fbf1f';
 }

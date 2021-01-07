@@ -5,40 +5,83 @@ import { Display } from "./display";
 import { Timer } from "./timer";
 import { GameObject } from "./gameObject";
 
-type TSettings = {
-  objectSize: number,
-  resolution: number[],
-  tickTime: number,
-  density: number,
-};
+export interface ISettings {
+  objectSize: number;
+  resolution: number;
+  tickTime: number;
+  density: number;
+}
 
 export class Game {
 
-  private display: Display;
-  private storage: Storage;
+  private readonly display: Display;
+  private readonly storage: Storage;
   private timer: Timer;
 
-  constructor(private settings: TSettings){
+  constructor(
+    private settings: ISettings,
+    private canvas: HTMLCanvasElement
+  ){
     this.storage = new Storage(this.createObjects());
-    this.timer = new Timer(() => console.log('work'), 200);
+    this.timer = new Timer(
+      () => this.tick(),
+      settings.tickTime
+    );
+    this.display = new Display(
+      this.settings.resolution,
+      this.settings.objectSize,
+      this.canvas,
+      this.storage,
+    );
+    this.display.draw();
   };
 
   public start(): void{
-    !this.timer.active && this.timer.start()
+    !this.timer.active && this.timer.start();
   }
 
   public stop(): void {
     this.timer.active && this.timer.stop();
   }
 
-  private createObjects(): GameObject[] {
-    let objects = [];
-    for (let x = 0; x < this.settings.resolution[0]; x += 1) {
-      for (let y = 0; y < this.settings.resolution[1]; y += 1) {
-        _.random(100 - this.settings.density) === 0 &&
-          objects.push(new GameObject([x, y]));
+  public restart(): void {
+    this.stop();
+    this.storage.newObjects(this.createObjects());
+    this.display.draw();
+  }
+
+  public started(): boolean {
+    return this.timer.active;
+  }
+
+  private createObjects(): GameObject[][] {
+    let objects: GameObject[][] = [];
+    const side = this.settings.resolution / this.settings.objectSize;
+    for (let x = 0; x < side; x += 1) {
+      let axis: GameObject[] = []
+      for (let y = 0; y < side; y += 1) {
+        axis.push(new GameObject(
+          _.random(this.settings.density) === 0
+        ))
       }
+      objects.push(axis)
     }
     return objects;
+  }
+
+  private tick(): void {
+    this.storage.objects = _.cloneDeep(this.storage.objects).map((row, x) => {
+      return row.map((obj, y) => {
+        const areaObjects = this.storage.getAreaObjects([x, y]);
+        const areaObjectsIsLife = areaObjects.filter(o => o.isLife);
+        if (!obj.isLife && areaObjectsIsLife.length === 3) {
+          obj.isLife = true
+        } else if (obj.isLife && (areaObjectsIsLife.length < 2 || areaObjectsIsLife.length > 3)) {
+          obj.isLife = false
+        }
+        return obj
+      })
+    })
+    this.display!.draw()
   }
 }

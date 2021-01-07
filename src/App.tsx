@@ -1,26 +1,71 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {
+  FC,
+  useState,
+  useRef,
+  useEffect,
+  ChangeEvent
+} from 'react';
+import { Menu } from "./menu";
+import { GameWindow } from "./gameWindow";
+
+import { Game, ISettings } from "./game/game";
+
 import './App.css';
 
-function App() {
+
+const initState: ISettings = {
+  tickTime: 20,
+  objectSize: 10,
+  resolution: window.innerWidth > 500 ? 800 : 300,
+  density: 2,
+}
+
+const minValues: ISettings = {
+  tickTime: 20,
+  objectSize: 5,
+  resolution: 50,
+  density: 2,
+}
+
+export const App: FC = () => {
+  const [ state, setState ] = useState<ISettings>(initState);
+  const handleChangeSettings = (e: ChangeEvent<HTMLInputElement>) => {
+    // @ts-ignore
+    if (minValues[e.target.name] > e.target.value) return;
+    setState({
+      ...state,
+      [ e.target.name ]: e.target.value,
+    });
+  }
+
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  let game: Game;
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      game = new Game(
+        { ...state },
+        canvasRef.current
+      );
+    }
+  }, [state])
+
+  const handleStartGame = () => game.start();
+  const handleStopGame = () => game.stop();
+  const handleRestartGame = () => game.restart();
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Menu
+        handleChange={handleChangeSettings}
+        handleStartGame={handleStartGame}
+        handleStopGame={handleStopGame}
+        handleRestartGame={handleRestartGame}
+        { ...state }
+      />
+      <GameWindow
+        canvasRef={canvasRef}
+      />
     </div>
   );
 }
-
-export default App;
