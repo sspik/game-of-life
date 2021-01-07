@@ -12,15 +12,18 @@ import { Game, ISettings } from "./game/game";
 
 import './App.css';
 
+interface IAppState extends ISettings {
+  [key: string]: number
+}
 
-const initState: ISettings = {
+const initState: IAppState = {
   tickTime: 20,
   objectSize: 10,
   resolution: window.innerWidth > 500 ? 800 : 300,
   density: 2,
 }
 
-const minValues: ISettings = {
+const minValues: IAppState = {
   tickTime: 20,
   objectSize: 5,
   resolution: 50,
@@ -30,8 +33,7 @@ const minValues: ISettings = {
 export const App: FC = () => {
   const [ state, setState ] = useState<ISettings>(initState);
   const handleChangeSettings = (e: ChangeEvent<HTMLInputElement>) => {
-    // @ts-ignore
-    if (minValues[e.target.name] > e.target.value) return;
+    if (minValues[e.target.name] > parseInt(e.target.value)) return;
     setState({
       ...state,
       [ e.target.name ]: e.target.value,
