@@ -35,6 +35,7 @@ export class Game {
       this.canvas,
       this.storage,
     );
+    this.addEvents();
     this.display.draw();
   };
 
@@ -86,5 +87,42 @@ export class Game {
       })
     })
     this.display!.draw()
+  }
+
+  private addEvents(): void {
+
+    const mousePosition = {
+      x: 0,
+      y: 0,
+    }
+
+    let mouseDown = false;
+
+    const rect = this.canvas.getBoundingClientRect();
+
+    const draw = () => {
+      if (mouseDown){
+        const x = Math.round(mousePosition.x / this.settings.objectSize);
+        const y = Math.round(mousePosition.y / this.settings.objectSize);
+        this.storage.getObject([y, x]).isLife = true;
+        this.display.draw();
+      }
+    }
+
+    this.canvas.addEventListener('mousemove', function (e: MouseEvent){
+      mousePosition.x = e.clientX - rect.left;
+      mousePosition.y = e.clientY - rect.top;
+    });
+    this.canvas.addEventListener('mousedown', function (){
+      mouseDown = true;
+    })
+    this.canvas.addEventListener('mouseup', function (){
+      mouseDown = false;
+    })
+    this.canvas.addEventListener('mouseenter', function (e: MouseEvent){
+      mousePosition.x = e.clientX - rect.left;
+      mousePosition.y = e.clientY - rect.top;
+    });
+    this.canvas.addEventListener('mousemove', draw);
   }
 }
