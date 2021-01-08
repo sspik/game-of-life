@@ -86,7 +86,7 @@ export class Game {
         return obj
       })
     })
-    this.display!.draw()
+    this.display.draw()
   }
 
   private addEvents(): void {
@@ -101,9 +101,10 @@ export class Game {
     const rect = this.canvas.getBoundingClientRect();
 
     const draw = () => {
+      const x = Math.floor(mousePosition.x / this.settings.objectSize);
+      const y = Math.floor(mousePosition.y / this.settings.objectSize);
       if (mouseDown){
-        const x = Math.round(mousePosition.x / this.settings.objectSize);
-        const y = Math.round(mousePosition.y / this.settings.objectSize);
+
         this.storage.getObject([y, x]).isLife = true;
         this.display.draw();
       }

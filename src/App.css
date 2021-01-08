@@ -28,7 +28,6 @@
 }
 
 .game {
-  height: 100vh;
   flex: 1 1 auto;
   margin-top: 30px;
 }
