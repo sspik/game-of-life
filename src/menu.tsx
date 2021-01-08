@@ -6,6 +6,7 @@ interface IMenuPros extends ISettings {
   handleStartGame: () => void;
   handleStopGame: () => void;
   handleRestartGame: () => void;
+  handleClearDisplay: () => void;
 }
 
 export const Menu: FC<IMenuPros> = (props) => {
@@ -19,6 +20,7 @@ export const Menu: FC<IMenuPros> = (props) => {
     handleStartGame,
     handleStopGame,
     handleRestartGame,
+    handleClearDisplay
   } = props;
 
   return (
@@ -108,6 +110,13 @@ export const Menu: FC<IMenuPros> = (props) => {
             onClick={handleRestartGame}
           >
             Restart
+          </button>
+        </div>
+        <div className="menu_input">
+          <button
+            onClick={handleClearDisplay}
+          >
+            Clear Display
           </button>
         </div>
       </div>

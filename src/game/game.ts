@@ -53,11 +53,17 @@ export class Game {
     this.display.draw();
   }
 
+  public clear(): void {
+    this.stop();
+    this.storage.newObjects(this.createObjects(true));
+    this.display.draw();
+  }
+
   public started(): boolean {
     return this.timer.active;
   }
 
-  private createObjects(): GameObject[][] {
+  private createObjects(clear: boolean = false): GameObject[][] {
     let objects: GameObject[][] = [];
     const sideX = this.settings.resolutionHeight / this.settings.objectSize;
     const sideY = this.settings.resolutionWidth / this.settings.objectSize;
@@ -65,7 +71,7 @@ export class Game {
       let axis: GameObject[] = []
       for (let y = 0; y < sideY; y += 1) {
         axis.push(new GameObject(
-          _.random(this.settings.density) === 0
+          clear ? false : _.random(this.settings.density) === 0
         ))
       }
       objects.push(axis)

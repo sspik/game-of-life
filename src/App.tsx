@@ -56,12 +56,14 @@ export const App: FC = () => {
     }
   }, [state])
 
+  const handleClearDisplay = () => game.clear();
   const handleStartGame = () => game.start();
   const handleStopGame = () => game.stop();
   const handleRestartGame = () => game.restart();
   return (
     <div className="App">
       <Menu
+        handleClearDisplay={handleClearDisplay}
         handleChange={handleChangeSettings}
         handleStartGame={handleStartGame}
         handleStopGame={handleStopGame}
